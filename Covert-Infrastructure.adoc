@@ -72,7 +72,7 @@ Identifing preferred VPS and/or Cloud Service Providers/Technology should come d
 - DNS resolution, How do your requests and queries process for DNS? Keep in mind governments own some DNS servers, and servers will be resolved to based on geo-location, unless specifically specified to do otherwise. Also remember to hardcode your DNS addresses, otherwise resolutions could be trapped and tracked.
 - Encryption, Manually deliver your keys yourself via uploading/generation. NEVER use a 3rd party key, never trust a 3rd party key. Never give your encryption keys to anyone. Always use Data Destruction on Failure Encryption. Always use systems that verify environmentals to ensure data destruction if data is cloned.
 - Vulnerabliities, ALWAYS PATCH YOUR SYSTEMS! Governments are NOT ABOVE HACKING YOUR SYSTEMS! Governments break laws on a regular basis, dont be so naive.
-- Automations, The ability to automate infrastructure is incredibly important to any systems survival. Environemnts that provide the previous requirements and this requirement are ideal candidates for selection.
+- Automations, The ability to automate infrastructure is incredibly important to any systems survival. Environments that provide the previous requirements and this requirement are ideal candidates for selection.
 
 {empty} +
 
