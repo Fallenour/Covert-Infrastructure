@@ -1,0 +1,247 @@
+////////
+
+
+Author: Logan Hicks, (Fallenour)
+Contact Information: Fallenour@yahoo.com, Skype: Fallenour
+Date Created: 04/02/2018
+Date Last Updated: 04/02/2018
+Code Source: Custom
+Coded In: AsciiDOC
+
+
+////////
+
+// Sourcing for Content and Design
+
+:imagesdir: ./images
+:iconsdir: ./icons
+:stylesdir: ./styles
+:scriptsdir: ./js
+:icons: font
+
+// Table of Contents, Displayed on Left Side
+
+:toc: left
+
+
+= Tutorial, Building Covert Infrastructure
+
+{empty} +
+
+This tutorial is intended to teach users how to successfully build fully anonymized infrastructure.
+
+{empty} +
+
+.*Objectives List*
+- Identify ideal conditions
+- Identify necessary VPS or Cloud Service Services based on requirements
+- Install necessary operating system, packages, and services
+- Understand necessary technologies in use
+- Verify functionality
+
+{empty} +
+
+== Objective 1,  Identify Ideal conditions
+
+Ideal conditions for any covert infrastructure are defined by the use case required for it. Most users requiring covert infrastructure usuually need to be:
+
+1. Fully Anonymous, defined as untracked, unlogged, and unverifiable
+2. "Account Owners" are preferrably Non-Existant
+3. Devices used to access, monitor, utilize, and mantain the infrastructure are required to be disposable in nature, with no native or integrated means of GPS or Geo Identification capabilities.
+4. Hosting Countries, Exit Countries, and Entry Countries should be generally unfavorable, non-cooperative, or hostile towards the country of intended operation, drastically decreasing the possiblity of cooperation or extradition.
+5. If infrastructure is utilized by a public facing institute, group, collective, or body, it should never connect or interact with any instrastructure or members of the institute directly or indirectly. Any requirements for such 
+   activity to exist should leverage anonymized means, and shortly after any infrastructure required for interaction should be physically, irrecoverably destroyed and disposed of, not wiped. 
+   Ideal methods of destruction and disposal are physical impact followed with high heat.
+6. Utilization of shell corporations, or ghost operations or operators, should leverage a defined, refined history, that although viable, is obscure in nature, and non-verifiable. This should include websites, webpages, blogs,
+   professional profiles, etc.
+7. Use of photos to identify exposed profiles, such as ghost operators, should use GAN generated images. This maximizes obscurity, while eliminating the possibility of counter intelligence related operations, such as use of
+   Tineye, Google, or other related photo and data verification services. Keep in consideration that in operations that mandate the interaction of live interaction require the exposure of at least one operator.
+8. Use of ghost organizations, institutes, or entities, to include shell corporations, should use legitimate trademarks, websites, and utilize links and references to ghost operators. This ensures maximum viability of believability.
+   
+{empty} +
+
+== Objective 2, Identify necessary VPS or Cloud Service Services based on requirements
+
+Identifing preferred VPS and/or Cloud Service Providers/Technology should come down to:
+
+- Accountability, Can they hold you responsible for any actions/inactions taken on the platform?
+- Tracking, Does the provider retain any form of records, logs, or data, meta or otherwise, on you the operator, or the platform users? Can they? (Just because they say no doesnt mean they cant lie)
+- Payment Systems, Does the provider or platform require you to provide proof of ownership of your payment method? Does the system require you to pay with a registered or regulated form of payment? Non-verifiable forms of payment are preferred.
+- Host Country, Where is the PHYSICAL Hardware located? Just because its a service provider, doesnt mean the technology "just exists", its gotta be somewhere. Make sure that "somewhere" isnt in an reciprocity extradition country to where you physically sit and operate. 
+- Traffic Flow, Where is the exit/entry point for your traffic flow? What point(s) do(es) the network traffic flow through? Keep in mind the more points you add, the more complexity, risk, and obscurity you gain, but also the more chances for potential legal interception.
+- DNS resolution, How do your requests and queries process for DNS? Keep in mind governments own some DNS servers, and servers will be resolved to based on geo-location, unless specifically specified to do otherwise. Also remember to hardcode your DNS addresses, otherwise resolutions could be trapped and tracked.
+- Encryption, Manually deliver your keys yourself via uploading/generation. NEVER use a 3rd party key, never trust a 3rd party key. Never give your encryption keys to anyone. Always use Data Destruction on Failure Encryption. Always use systems that verify environmentals to ensure data destruction if data is cloned.
+- Vulnerabliities, ALWAYS PATCH YOUR SYSTEMS! Governments are NOT ABOVE HACKING YOUR SYSTEMS! Governments break laws on a regular basis, dont be so naive.
+- Automations, The ability to automate infrastructure is incredibly important to any systems survival. Environemnts that provide the previous requirements and this requirement are ideal candidates for selection.
+
+{empty} +
+
+== Objective 3, Install necessary operating system, packages, and services
+
+For the purposes of this system guide, this infrastructure will use basic container, VM, and service monitoring systems to ensure service availability.
+
+	$ apt install lxd lxd-client
+	
+Once the packages for LXD are done installing, run the following command to complete the installation and preparation processes:
+
+	$ sudo lxd init
+	
+LXD should now be successfully installed. There will initially be no containers. You can verify proper function by running the following command:
+
+	$ lxc list
+	
+Next, you need to install KVM. For those wondering, LXD and KVM are used simultaneously due to performance and density requirements. Some systems and applications cannont run inside of containers due to dependencies. 
+
+	$ sudo apt-get install qemu-kvm libvirt-bin ubuntu-vm-builder bridge-utils
+	
+Usually you would check to see if a system is virtualization compatible. Cloud providers only purchase virtualization compatible hardware. Otherwise, their services wouldnt be available. Can't Cloud without a cloud so to say.
+
+After KVM is finished installing, you will need to ensure your user is added to the KVM group. This is done with the following command:
+
+	$ sudo adduser `id -un` libvirtd
+
+Once your user is successfully added to the group, verify the KVM install with the following command. Note that upon installation, KVM does not have any instances in it.
+
+	$ virsh list --all
+
+Now that KVM and LXD are installed, our ability to leverage virtualization and application services is now avaialable. 
+
+To install and configure SIM, run the following command:
+
+	$ cd /usr/src && wget http://www.rfxn.com/downloads/sim-current.tar.gz && tar -xvzf sim-current.tar.gz && cd sim-* && ./setup -i && '/usr/local/sim/sim' && /usr/local/sbin/sim -j
+
+This command will download the source for SIM, unpack the source for SIM, change directories to the proper install directory, and execute the auto-configuration for SIM. After that, it will run SIM, and the last will create a cron job for SIM to ensure its running on startup.
+
+{empty} +
+
+Next, we will install WebVirtManager, a package bundle and web application written in python leveraging the Django Framework to allow for administration and management of the KVMs via web interface over a hidden Tor service.
+
+First we will start by installing the necessary packages:
+
+	$ apt-get install git python-pip python-libvirt python-libxml2 novnc nginx
+
+Then install the git package: 
+
+	$ git clone git://github.com/retspan/webvirtmgr.git
+
+After the package from the git repo is pulled down, then we need to install the requirements for python using pip. Pip will install and configure the neccesary Django services:
+
+	$ pip install -r requirements.txt
+
+Once Pip has installed all the necessary requirements, you will need to sync the database. Currently that database will be sqlitedb. For high end environments, I recommend you install Postgresql or Mysql for linux, MSSql for Microsoft.
+
+	$ ./manage.py syncdb
+
+This command will sync the database for the Django project via Django with the localized database that is natively installed with Django by default (sqlitedb).
+
+Then you need to create your first account user, the superuser, for administrating the Django Site.
+
+	$ ./manage.py createsuperuser
+
+Now, just a little cleanup effort with:
+
+	$ ./manage.py collectstatic
+
+Now we can run the server:
+
+	$ ./manage.py runserver 127.0.0.1:8000
+
+This will create our web interace running on port 8000 on the localhost (127.0.0.1:8000). This will be the primary window. I highly advise you make this a cronjob to run on startup. I also recommend that you do the following:
+
+- Install virtualenv or venv, depending on python project. This will ensure that if you install more than one application on the same container or vm that you do not break one application due to a dependency.
+- Install everything in /var/www directory. This is a standard best practice.
+- Download and maintain your own package repo, which can be done via apt-cache, as well as download the git package(s) to your own private git repo, which can be done with gitlab. Please see the optionals belows for additional information.
+
+Now we will convert our currently running web manager for KVM into a Hidden Tor Service.
+
+First we must install Tor:
+
+	apt-get install tor
+
+The next step is to enable the hidden services, which can be done with the following command:
+
+	$ sed -i 's/#HiddenServiceDir /var/lib/tor/hidden_service//HiddenServiceDir /var/lib/tor/hidden_service//' /etc/tor/torrc && sed -i 's/#HiddenServicePort 80 127.0.0.1:8000/HiddenServicePort 80 127.0.0.1:8000/' /etc/tor/torrc
+
+Now that the Tor service is installed and configured, we can test it:
+
+	$ sudo tor
+
+Once the tor service is run, it will reconfigure the system hostname to your new tor address. Once you verify that the service is properly running, kill the service with Ctrl + C.'
+
+Change directories to the hidden_services directory to confirm hostname and private key files are created successfully. We will also use this directory for installing additionally required tools for further steps.
+
+	$ cd /var/lib/tor/hidden_service && ls
+
+After you confirm that both the hostname file as well as the private key are present, we will install install eschalot to create a custom Onion Address:
+
+	$ git clone https://github.com/ReclaimYourPrivacy/eschalot
+
+We then change to the eschalot directory, compile eschalot, and generate the custom address:
+
+	$ cd /eschalot && make && ./eschalot -vct4 -p null
+
+The number 4 represents the number of cores, so change the command to accomadate for the number of cores to use when generating the address, -p represents the prefix, which here is null, for the address that will be generated.
+This program will run indefinitely unless stopped, so once you let it run for a few moments, stop it, and select an address. Copy the RSA private key from the selected address. We will use it in the next step.
+
+Now that tor is configured, lets add the onion address to the service:
+
+	$ cd /var/lib/tor/hidden_service/ && rm hostname && cat private_key
+
+This erases the old host file, preparing the system to generate the new one based on the new private key.
+
+Open the old file with a text editor, be it vi, vim, nano, or another of your choice.
+
+Delete the old key, and replace it with the previous key from eschalot that we copied earlier.
+
+Check to verify that the previous private_key is different from the previous key:
+
+	$ cat private_key
+
+Now with the previous private_key replaced with the new one, restart the tor service and verify the new hostname file:
+
+	$ sudo tor && cat hostname
+
+If the hostname matches the selected choice, verify the address in the tor browser. The hidden service should now be configured, and resolve with the custom address.
+
+To configure your Tor system to only use specific Exit, Entry, or to Exclude certain countries, you will need to configure it with the ExitNodes, EntryNodes, or ExcludeNodes in your torrc file with the respective country codes. See the guides below for more information.
+
+{empty} +
+
+This completes the guide on how to successfully establish, setup, and configure covert infrastructure. 
+
+{empty} +
+
+.*References*
+[cols="2", options="header"]
+|===
+|Reference 
+|Source
+
+|Install LXD
+|https://linuxcontainers.org/lxd/getting-started-cli/[link]
+
+|Install KVM
+|https://help.ubuntu.com/community/KVM/Installation[link]
+
+|Install SIM
+|https://linoxide.com/monitoring-2/open-source-tool-monitor-linux-system-status/amp/[link]
+
+|Host your own Tor Hidden Service with a Custom Onion Address
+|https://null-byte.wonderhowto.com/how-to/host-your-own-tor-hidden-service-with-custom-onion-address-0180159/[link]
+
+|Tips for running an Exit Node
+|https://blog.torproject.org/tips-running-exit-node[link]
+
+|Tor Relay Guide
+|https://trac.torproject.org/projects/tor/wiki/TorRelayGuide[link]
+
+|Configure Tor for specified Exit Nodes
+|https://tor.stackexchange.com/questions/733/can-i-exit-from-a-specific-country-or-node[link]
+
+|Tor Operational Manual
+|https://www.torproject.org/docs/tor-manual.html.en[link]
+
+|List of Node Country Codes
+|http://www.b3rn3d.com/blog/2014/03/05/tor-country-codes/[link]
+|===
+	
